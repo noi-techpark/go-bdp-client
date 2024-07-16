@@ -6,8 +6,25 @@ SPDX-License-Identifier: CC0-1.0
 
 # Golang client for Open Data Hub BDP (Time series writer) API
 
+This is a golang client library for the Open Data Hub time series writer:
 [BDP writer API](https://github.com/noi-techpark/bdp-core)
 
+It's intended mainly for internal use inside the Open Data Hub.
+
+## Usage
+`go get https://github.com/noi-techpark/go-bdp-client`
+
+## Information
+
+### Support
+
+For support, please contact [help@opendatahub.com](mailto:help@opendatahub.com).
+
+### Contributing
+
+If you'd like to contribute, please follow our [Getting
+Started](https://github.com/noi-techpark/odh-docs/wiki/Contributor-Guidelines:-Getting-started)
+instructions.
 ### License
 The code in this project is licensed under Mozilla Public License Version 2.0
 
