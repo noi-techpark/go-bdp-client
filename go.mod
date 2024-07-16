@@ -2,6 +2,6 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-module bdplib
+module opendatahub.com/bdplib
 
 go 1.20.0
