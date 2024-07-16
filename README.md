@@ -12,7 +12,7 @@ This is a golang client library for the Open Data Hub time series writer:
 It's intended mainly for internal use inside the Open Data Hub.
 
 ## Usage
-`go get https://github.com/noi-techpark/go-bdp-client`
+`go get github.com/noi-techpark/go-bdp-client`
 
 ## Information
 
