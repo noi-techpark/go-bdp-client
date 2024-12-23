@@ -318,7 +318,7 @@ func (b *Bdp) SyncEvents(events []Event) error {
 	b.pushProvenance()
 
 	slog.Info("Syncing " + strconv.Itoa(len(events)) + " events...")
-	url := b.BaseUrl + syncDataTypesPath + "?prn=" + b.Prn + "&prv=" + b.Prv
+	url := b.BaseUrl + eventsPath + "?prn=" + b.Prn + "&prv=" + b.Prv
 	_, err := b.postToWriter(events, url)
 	slog.Info("Syncing events done.")
 	return err
