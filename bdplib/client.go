@@ -158,6 +158,17 @@ func CreateStation(id string, name string, stationType string, lat float64, lon 
 	}
 	return station
 }
+func CreateEvent(uuid string, name string, category string, eventSeriesUuid string, origin string) Event {
+	// TODO add some checks
+	var event = Event{
+		Uuid:            uuid,
+		Name:            name,
+		Category:        category,
+		EventSeriesUuid: eventSeriesUuid,
+		Origin:          origin,
+	}
+	return event
+}
 
 func CreateRecord(ts int64, value interface{}, period uint64) Record {
 	// TODO add some checks
