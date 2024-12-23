@@ -34,7 +34,7 @@ type DataType struct {
 type Station struct {
 	Id            string                 `json:"id"`
 	Name          string                 `json:"name"`
-	StationType   string                 `json:"stationType,omitempty"` // when syncing, this needs to be null, blank string fails
+	StationType   string                 `json:"stationType,omitempty"`
 	Latitude      float64                `json:"latitude"`
 	Longitude     float64                `json:"longitude"`
 	Origin        string                 `json:"origin"`
@@ -55,12 +55,31 @@ type Record struct {
 	Timestamp int64       `json:"timestamp"`
 }
 
+// maps https://github.com/noi-techpark/bdp-core/blob/main/dto/src/main/java/com/opendatahub/timeseries/bdp/dto/dto/EventDto.java
+type Event struct {
+	Uuid                string `json:"uuid"`
+	Origin              string `json:"origin"`
+	Category            string `json:"category"`
+	EventSeriesUuid     string `json:"eventSeriesUuid"`
+	Name                string `json:"name"`
+	Description         string `json:"description"`
+	LocationDescription string `json:"locationDescription"`
+	WktGeometry         string `json:"wktGeometry"`
+	// Start time (included), Unix timestamp ms
+	EventStart int64 `json:"eventStart"`
+	// End time (excluded), Unix timestamp ms
+	EventEnd   int64                  `json:"eventEnd"`
+	Provenance string                 `json:"provenance"`
+	MetaData   map[string]interface{} `json:"metaData"`
+}
+
 const syncDataTypesPath string = "/syncDataTypes"
 const syncStationsPath string = "/syncStations"
 const pushRecordsPath string = "/pushRecords"
 const getDateOfLastRecordPath string = "/getDateOfLastRecord"
 const stationsPath string = "/stations"
 const provenancePath string = "/provenance"
+const eventsPath string = "/events"
 
 type Bdp struct {
 	ProvenanceUuid string
@@ -293,4 +312,14 @@ func (b *Bdp) GetStations(stationType string, origin string) ([]Station, error) 
 	}
 
 	return result, nil
+}
+
+func (b *Bdp) SyncEvents(events []Event) error {
+	b.pushProvenance()
+
+	slog.Info("Syncing " + strconv.Itoa(len(events)) + " events...")
+	url := b.BaseUrl + syncDataTypesPath + "?prn=" + b.Prn + "&prv=" + b.Prv
+	_, err := b.postToWriter(events, url)
+	slog.Info("Syncing events done.")
+	return err
 }
