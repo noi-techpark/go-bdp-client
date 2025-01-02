@@ -79,7 +79,7 @@ const pushRecordsPath string = "/pushRecords"
 const getDateOfLastRecordPath string = "/getDateOfLastRecord"
 const stationsPath string = "/stations"
 const provenancePath string = "/provenance"
-const eventsPath string = "/events"
+const eventsPath string = "/event"
 
 type Bdp struct {
 	ProvenanceUuid string
