@@ -68,7 +68,7 @@ type Event struct {
 	// Start time (included), Unix timestamp ms
 	EventStart int64 `json:"eventStart"`
 	// End time (excluded), Unix timestamp ms
-	EventEnd   int64                  `json:"eventEnd"`
+	EventEnd   *int64                 `json:"eventEnd"`
 	Provenance string                 `json:"provenance"`
 	MetaData   map[string]interface{} `json:"metaData"`
 }
