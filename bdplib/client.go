@@ -22,15 +22,6 @@ type Provenance struct {
 	DataCollectorVersion string `json:"dataCollectorVersion"`
 }
 
-type DataType struct {
-	Name        string            `json:"name"`
-	Unit        string            `json:"unit"`
-	Description string            `json:"description"`
-	Rtype       string            `json:"rType"`
-	Period      uint32            `json:"period"`
-	MetaData    map[string]string `json:"metaData"`
-}
-
 type Station struct {
 	Id            string                 `json:"id"`
 	Name          string                 `json:"name"`
@@ -81,7 +72,7 @@ const stationsPath string = "/stations"
 const provenancePath string = "/provenance"
 const eventsPath string = "/event"
 
-type Bdp struct {
+type BdpImpl struct {
 	ProvenanceUuid string
 	BaseUrl        string
 	Prv            string
@@ -90,8 +81,8 @@ type Bdp struct {
 	Auth           *Auth
 }
 
-func FromEnv() *Bdp {
-	b := Bdp{}
+func FromEnv() Bdp {
+	b := BdpImpl{}
 	b.BaseUrl = os.Getenv("BDP_BASE_URL") + "/json"
 	b.Prv = os.Getenv("BDP_PROVENANCE_VERSION")
 	b.Prn = os.Getenv("BDP_PROVENANCE_NAME")
@@ -100,7 +91,7 @@ func FromEnv() *Bdp {
 	return &b
 }
 
-func (b *Bdp) SyncDataTypes(stationType string, dataTypes []DataType) error {
+func (b *BdpImpl) SyncDataTypes(stationType string, dataTypes []DataType) error {
 	b.pushProvenance()
 
 	slog.Debug("Syncing data types...")
@@ -113,7 +104,7 @@ func (b *Bdp) SyncDataTypes(stationType string, dataTypes []DataType) error {
 	return err
 }
 
-func (b *Bdp) SyncStations(stationType string, stations []Station, syncState bool, onlyActivate bool) error {
+func (b *BdpImpl) SyncStations(stationType string, stations []Station, syncState bool, onlyActivate bool) error {
 	b.pushProvenance()
 
 	slog.Info("Syncing " + strconv.Itoa(len(stations)) + " " + stationType + " stations...")
@@ -123,7 +114,7 @@ func (b *Bdp) SyncStations(stationType string, stations []Station, syncState boo
 	return err
 }
 
-func (b *Bdp) PushData(stationType string, dataMap DataMap) error {
+func (b *BdpImpl) PushData(stationType string, dataMap DataMap) error {
 	b.pushProvenance()
 	if dataMap.Provenance == "" {
 		dataMap.Provenance = b.ProvenanceUuid
@@ -180,7 +171,11 @@ func CreateRecord(ts int64, value interface{}, period uint64) Record {
 	return record
 }
 
-func (b *Bdp) CreateDataMap() DataMap {
+func (b *BdpImpl) GetOrigin() string {
+	return b.Origin
+}
+
+func (b *BdpImpl) CreateDataMap() DataMap {
 	var dataMap = DataMap{
 		Name:       "(default)",
 		Provenance: b.ProvenanceUuid,
@@ -220,7 +215,7 @@ func (dataMap *DataMap) AddRecord(stationCode string, dataType string, record Re
 	}
 }
 
-func (b *Bdp) postToWriter(data interface{}, fullUrl string) (string, error) {
+func (b *BdpImpl) postToWriter(data interface{}, fullUrl string) (string, error) {
 	json, err := json.Marshal(data)
 	if err != nil {
 		slog.Error("Error unmarshalling JSON POST data")
@@ -260,7 +255,7 @@ func (b *Bdp) postToWriter(data interface{}, fullUrl string) (string, error) {
 	return ress, nil
 }
 
-func (b *Bdp) pushProvenance() {
+func (b *BdpImpl) pushProvenance() {
 	if len(b.ProvenanceUuid) > 0 {
 		return
 	}
@@ -287,7 +282,7 @@ func (b *Bdp) pushProvenance() {
 	slog.Info("Pushing provenance done", "uuid", b.ProvenanceUuid)
 }
 
-func (b *Bdp) GetStations(stationType string, origin string) ([]Station, error) {
+func (b *BdpImpl) GetStations(stationType string, origin string) ([]Station, error) {
 	slog.Debug("Fetching stations", "stationType", stationType, "origin", origin)
 
 	url := b.BaseUrl + stationsPath + fmt.Sprintf("/%s/?origin=%s&prn=%s&prv=%s", stationType, origin, b.Prn, b.Prv)
@@ -325,7 +320,7 @@ func (b *Bdp) GetStations(stationType string, origin string) ([]Station, error) 
 	return result, nil
 }
 
-func (b *Bdp) SyncEvents(events []Event) error {
+func (b *BdpImpl) SyncEvents(events []Event) error {
 	b.pushProvenance()
 
 	slog.Info("Syncing " + strconv.Itoa(len(events)) + " events...")
