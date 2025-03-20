@@ -7,7 +7,7 @@ package bdpmock
 import (
 	"os"
 
-	"github.com/noi-techpark/go-bdp-client/bdplib"
+	"github.com/noi-techpark/go-timeseries-writer-client/bdplib"
 )
 
 type BdpMockCalls struct {
