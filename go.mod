@@ -2,6 +2,6 @@
 //
 // SPDX-License-Identifier: CC0-1.0
 
-module github.com/noi-techpark/go-timeseries-writer-client
+module github.com/noi-techpark/go-bdp-client
 
 go 1.20.0
