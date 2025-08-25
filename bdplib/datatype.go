@@ -12,12 +12,12 @@ import (
 )
 
 type DataType struct {
-	Name        string            `json:"name"`
-	Unit        string            `json:"unit"`
-	Description string            `json:"description"`
-	Rtype       string            `json:"rtype"`
-	Period      uint32            `json:"period"`
-	MetaData    map[string]string `json:"metaData"`
+	Name        string         `json:"name"`
+	Unit        string         `json:"unit"`
+	Description string         `json:"description"`
+	Rtype       string         `json:"rtype"`
+	Period      uint32         `json:"period"`
+	MetaData    map[string]any `json:"metaData"`
 }
 
 type DataTypeList struct {
