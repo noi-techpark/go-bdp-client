@@ -5,7 +5,7 @@
 package bdplib
 
 type Bdp interface {
-	SyncDataTypes(stationType string, dataTypes []DataType) error
+	SyncDataTypes(dataTypes []DataType) error
 	// SyncStations sync stations in the bdp.
 	//
 	// If syncState is true, the state of the bdp will be synced with the slice of stations passed.

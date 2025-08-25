@@ -91,12 +91,12 @@ func FromEnv() Bdp {
 	return &b
 }
 
-func (b *BdpImpl) SyncDataTypes(stationType string, dataTypes []DataType) error {
+func (b *BdpImpl) SyncDataTypes(dataTypes []DataType) error {
 	b.pushProvenance()
 
 	slog.Debug("Syncing data types...")
 
-	url := b.BaseUrl + syncDataTypesPath + "?stationType=" + stationType + "&prn=" + b.Prn + "&prv=" + b.Prv
+	url := b.BaseUrl + syncDataTypesPath + "&prn=" + b.Prn + "&prv=" + b.Prv
 
 	_, err := b.postToWriter(dataTypes, url)
 

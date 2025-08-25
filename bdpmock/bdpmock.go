@@ -11,7 +11,7 @@ import (
 )
 
 type BdpMockCalls struct {
-	SyncedDataTypes map[string][][]bdplib.DataType  `json:"syncedDataTypes"`
+	SyncedDataTypes [][]bdplib.DataType             `json:"syncedDataTypes"`
 	SyncedData      map[string][]bdplib.DataMap     `json:"syncedData"`
 	SyncedStations  map[string][]BdpMockStationCall `json:"syncedStations"`
 }
@@ -29,7 +29,7 @@ type BdpMock struct {
 	Origin         string
 
 	// stationType - []DataType
-	SyncedDataTypes map[string][][]bdplib.DataType
+	SyncedDataTypes [][]bdplib.DataType
 	// stationType - []DataMap
 	SyncedData map[string][]bdplib.DataMap
 	// stationType - []BdpMockStationCall
@@ -43,7 +43,7 @@ func MockFromEnv() bdplib.Bdp {
 	b.Origin = os.Getenv("BDP_ORIGIN")
 	b.SyncedData = make(map[string][]bdplib.DataMap)
 	b.SyncedStations = make(map[string][]BdpMockStationCall)
-	b.SyncedDataTypes = make(map[string][][]bdplib.DataType)
+	b.SyncedDataTypes = [][]bdplib.DataType{}
 	return &b
 }
 
@@ -56,12 +56,8 @@ func (b *BdpMock) CreateDataMap() bdplib.DataMap {
 	return dataMap
 }
 
-func (b *BdpMock) SyncDataTypes(stationType string, dataTypes []bdplib.DataType) error {
-	if _, ok := b.SyncedDataTypes[stationType]; ok {
-		b.SyncedDataTypes[stationType] = append(b.SyncedDataTypes[stationType], dataTypes)
-	} else {
-		b.SyncedDataTypes[stationType] = [][]bdplib.DataType{dataTypes}
-	}
+func (b *BdpMock) SyncDataTypes(dataTypes []bdplib.DataType) error {
+	b.SyncedDataTypes = append(b.SyncedDataTypes, dataTypes)
 	return nil
 }
 
