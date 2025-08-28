@@ -96,7 +96,7 @@ func (b *BdpImpl) SyncDataTypes(dataTypes []DataType) error {
 
 	slog.Debug("Syncing data types...")
 
-	url := b.BaseUrl + syncDataTypesPath + "&prn=" + b.Prn + "&prv=" + b.Prv
+	url := b.BaseUrl + syncDataTypesPath + "?prn=" + b.Prn + "&prv=" + b.Prv
 
 	_, err := b.postToWriter(dataTypes, url)
 
