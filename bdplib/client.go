@@ -12,7 +12,6 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
-	"os"
 	"strconv"
 )
 
@@ -64,13 +63,13 @@ type Event struct {
 	MetaData   map[string]interface{} `json:"metaData"`
 }
 
-const syncDataTypesPath string = "/syncDataTypes"
-const syncStationsPath string = "/syncStations"
-const pushRecordsPath string = "/pushRecords"
-const getDateOfLastRecordPath string = "/getDateOfLastRecord"
-const stationsPath string = "/stations"
-const provenancePath string = "/provenance"
-const eventsPath string = "/event"
+const syncDataTypesPath string = "/json/syncDataTypes"
+const syncStationsPath string = "/json/syncStations"
+const pushRecordsPath string = "/json/pushRecords"
+const getDateOfLastRecordPath string = "/json/getDateOfLastRecord"
+const stationsPath string = "/json/stations"
+const provenancePath string = "/json/provenance"
+const eventsPath string = "/json/event"
 
 type BdpImpl struct {
 	ProvenanceUuid string
@@ -81,13 +80,26 @@ type BdpImpl struct {
 	Auth           *Auth
 }
 
-func FromEnv() Bdp {
+type BdpEnv struct {
+	BDP_BASE_URL           string
+	BDP_PROVENANCE_VERSION string
+	BDP_PROVENANCE_NAME    string
+	BDP_ORIGIN             string
+	BDP_TOKEN_URL          string
+	BDP_CLIENT_ID          string
+	BDP_CLIENT_SECRET      string
+}
+
+func FromEnv(e BdpEnv) Bdp {
 	b := BdpImpl{}
-	b.BaseUrl = os.Getenv("BDP_BASE_URL") + "/json"
-	b.Prv = os.Getenv("BDP_PROVENANCE_VERSION")
-	b.Prn = os.Getenv("BDP_PROVENANCE_NAME")
-	b.Origin = os.Getenv("BDP_ORIGIN")
-	b.Auth = AuthFromEnv()
+	b.BaseUrl = e.BDP_BASE_URL
+	b.Prn = e.BDP_PROVENANCE_NAME
+	b.Prv = e.BDP_PROVENANCE_VERSION
+	b.Origin = e.BDP_ORIGIN
+	b.Auth = &Auth{}
+	b.Auth.TokenUrl = e.BDP_TOKEN_URL
+	b.Auth.ClientId = e.BDP_CLIENT_ID
+	b.Auth.ClientSecret = e.BDP_CLIENT_SECRET
 	return &b
 }
 

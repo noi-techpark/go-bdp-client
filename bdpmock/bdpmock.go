@@ -5,8 +5,6 @@
 package bdpmock
 
 import (
-	"os"
-
 	"github.com/noi-techpark/go-bdp-client/bdplib"
 )
 
@@ -36,11 +34,11 @@ type BdpMock struct {
 	SyncedStations map[string][]BdpMockStationCall
 }
 
-func MockFromEnv() bdplib.Bdp {
+func MockFromEnv(e bdplib.BdpEnv) bdplib.Bdp {
 	b := BdpMock{}
-	b.Prv = os.Getenv("BDP_PROVENANCE_VERSION")
-	b.Prn = os.Getenv("BDP_PROVENANCE_NAME")
-	b.Origin = os.Getenv("BDP_ORIGIN")
+	b.Prv = e.BDP_PROVENANCE_VERSION
+	b.Prn = e.BDP_PROVENANCE_NAME
+	b.Origin = e.BDP_ORIGIN
 	b.SyncedData = make(map[string][]bdplib.DataMap)
 	b.SyncedStations = make(map[string][]BdpMockStationCall)
 	b.SyncedDataTypes = [][]bdplib.DataType{}

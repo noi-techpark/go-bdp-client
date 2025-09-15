@@ -10,7 +10,6 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -32,14 +31,6 @@ type Auth struct {
 	ClientSecret string
 	token        Token
 	tokenExpiry  int64
-}
-
-func AuthFromEnv() *Auth {
-	a := Auth{}
-	a.TokenUrl = os.Getenv("ODH_TOKEN_URL")
-	a.ClientId = os.Getenv("ODH_CLIENT_ID")
-	a.ClientSecret = os.Getenv("ODH_CLIENT_SECRET")
-	return &a
 }
 
 func (a *Auth) getToken() string {
