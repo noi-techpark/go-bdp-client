@@ -12,6 +12,6 @@ require (
 )
 
 require (
-	github.com/google/go-cmp v0.5.9 // indirect
+	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 )
