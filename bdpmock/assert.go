@@ -2,16 +2,15 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-package testsuite
+package bdpmock
 
 import (
 	"reflect"
 	"sort"
 	"testing"
 
-	"github.com/noi-techpark/opendatahub-go-sdk/bdplib"
-	"github.com/noi-techpark/opendatahub-go-sdk/testsuite/bdpmock"
-	"gotest.tools/v3/assert"
+	"github.com/noi-techpark/go-bdp-client/bdplib"
+	"gotest.tools/assert"
 	"gotest.tools/v3/assert/cmp"
 )
 
@@ -149,7 +148,7 @@ func normalizeDataMapSlice(dmSlice []bdplib.DataMap) {
 }
 
 // Compare two BdpMockCalls structs for equality.
-func CompareBdpMockCalls(t *testing.T, expected, actual bdpmock.BdpMockCalls) {
+func CompareBdpMockCalls(t *testing.T, expected, actual BdpMockCalls) {
 	// 1. Compare SyncedDataTypes
 	assert.Assert(t, cmp.DeepEqual(
 		unifyNumbersToFloat(expected.SyncedDataTypes), unifyNumbersToFloat(actual.SyncedDataTypes)), "SyncedDataTypes differ")
