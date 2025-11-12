@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/noi-techpark/go-bdp-client/bdplib"
-	"gotest.tools/assert"
+	"gotest.tools/v3/assert"
 	"gotest.tools/v3/assert/cmp"
 )
 
