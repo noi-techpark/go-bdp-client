@@ -82,6 +82,10 @@ func (b *BdpMock) PushData(stationType string, dataMap bdplib.DataMap) error {
 	return nil
 }
 
+func (b *BdpMock) SyncStationStates(stationType string, origin *string, stations []string, onlyActivation bool) error {
+	return nil
+}
+
 func (b *BdpMock) GetOrigin() string {
 	return b.Origin
 }

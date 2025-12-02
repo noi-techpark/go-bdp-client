@@ -18,4 +18,6 @@ type Bdp interface {
 	CreateDataMap() DataMap
 
 	GetOrigin() string
+
+	SyncStationStates(stationType string, origin *string, stations []string, onlyActivation bool) error
 }

@@ -65,6 +65,7 @@ type Event struct {
 
 const syncDataTypesPath string = "/json/syncDataTypes"
 const syncStationsPath string = "/json/syncStations"
+const syncStationStatesPath string = "/json/syncStationStates"
 const pushRecordsPath string = "/json/pushRecords"
 const getDateOfLastRecordPath string = "/json/getDateOfLastRecord"
 const stationsPath string = "/json/stations"
@@ -113,6 +114,21 @@ func (b *BdpImpl) SyncDataTypes(dataTypes []DataType) error {
 	_, err := b.postToWriter(dataTypes, url)
 
 	slog.Debug("Syncing data types done.")
+	return err
+}
+
+func (b *BdpImpl) SyncStationStates(stationType string, origin *string, stations []string, onlyActivation bool) error {
+	b.pushProvenance()
+
+	slog.Info("Syncing States " + strconv.Itoa(len(stations)) + " " + stationType + " stations...")
+	url := b.BaseUrl + syncStationStatesPath + "/" + stationType
+	if nil != origin {
+		url = fmt.Sprintf("%s/%s", url, *origin)
+	}
+
+	url = url + "?prn=" + b.Prn + "&prv=" + b.Prv + "&onlyActivation=" + strconv.FormatBool(onlyActivation)
+	_, err := b.postToWriter(stations, url)
+	slog.Info("Syncing States stations done.")
 	return err
 }
 
