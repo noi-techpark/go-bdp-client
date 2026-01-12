@@ -147,6 +147,15 @@ func normalizeDataMapSlice(dmSlice []bdplib.DataMap) {
 	})
 }
 
+// normalizeStationCalls sorts the stations within each BdpMockStationCall by station ID for stable comparison.
+func normalizeStationCalls(calls []BdpMockStationCall) {
+	for i := range calls {
+		sort.Slice(calls[i].Stations, func(a, b int) bool {
+			return calls[i].Stations[a].Id < calls[i].Stations[b].Id
+		})
+	}
+}
+
 // Compare two BdpMockCalls structs for equality.
 func CompareBdpMockCalls(t *testing.T, expected, actual BdpMockCalls) {
 	// 1. Compare SyncedDataTypes
@@ -176,7 +185,11 @@ func CompareBdpMockCalls(t *testing.T, expected, actual BdpMockCalls) {
 		if !ok {
 			continue
 		}
-		// Use the spread operator '...' to pass the options.
+
+		// Sort stations by ID for stable comparison
+		normalizeStationCalls(expectedStations)
+		normalizeStationCalls(actualStations)
+
 		assert.Assert(t, cmp.DeepEqual(
 			unifyNumbersToFloat(expectedStations), unifyNumbersToFloat(actualStations)), "SyncedStations for key %s differs", key)
 	}
