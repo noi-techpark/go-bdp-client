@@ -8,3 +8,7 @@ Source: https://github.com/noi-techpark/go-bdp-client
 # Files: src/*
 # Copyright: $YEAR $NAME <$CONTACT>
 # License: ...
+
+Files: .github/*
+Copyright: (c) NOI Techpark <digital@noi.bz.it>
+License: CC0-1.0
