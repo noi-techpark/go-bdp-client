@@ -22,15 +22,15 @@ type Provenance struct {
 }
 
 type Station struct {
-	Id            string                 `json:"id"`
-	Name          string                 `json:"name"`
-	StationType   string                 `json:"stationType,omitempty"`
-	Latitude      float64                `json:"latitude"`
-	Longitude     float64                `json:"longitude"`
-	Origin        string                 `json:"origin"`
-	ParentStation string                 `json:"parentStation,omitempty"`
-	ParentType    string                 `json:"parentType,omitempty"`
-	MetaData      map[string]interface{} `json:"metaData"`
+	Id                string                 `json:"id"`
+	Name              string                 `json:"name"`
+	StationType       string                 `json:"stationType,omitempty"`
+	Latitude          float64                `json:"latitude"`
+	Longitude         float64                `json:"longitude"`
+	Origin            string                 `json:"origin"`
+	ParentStation     string                 `json:"parentStation,omitempty"`
+	ParentStationType string                 `json:"parentStationType,omitempty"`
+	MetaData          map[string]interface{} `json:"metaData"`
 }
 
 type DataMap struct {
