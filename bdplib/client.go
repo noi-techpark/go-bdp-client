@@ -29,6 +29,7 @@ type Station struct {
 	Longitude     float64                `json:"longitude"`
 	Origin        string                 `json:"origin"`
 	ParentStation string                 `json:"parentStation,omitempty"`
+	ParentType    string                 `json:"parentType,omitempty"`
 	MetaData      map[string]interface{} `json:"metaData"`
 }
 
