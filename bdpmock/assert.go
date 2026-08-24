@@ -39,20 +39,34 @@ func unifyValue(rv reflect.Value) interface{} {
 		return unifyValue(rv.Elem())
 
 	case reflect.Struct:
-		// Convert struct to map[string]interface{}
+		// Round-trip through encoding/json rather than walking the fields.
+		//
+		// The other side of a comparison is a snapshot read back from a file,
+		// so it holds whatever json.Marshal produced: tag names, omitempty
+		// elisions, embedded fields inlined, and any custom MarshalJSON
+		// honoured. Walking fields reproduces none of that — it keys on the Go
+		// field name, so an in-memory struct with `json:"medium_url"` compares
+		// as "MediumUrl" and never matches the file. time.Time is the sharpest
+		// case: every field is unexported, so a walk yields an empty map.
+		if rv.CanInterface() {
+			if b, err := json.Marshal(rv.Interface()); err == nil {
+				var v interface{}
+				if err := json.Unmarshal(b, &v); err == nil {
+					// v is now maps, slices and scalars, so this cannot recurse
+					// back into this branch.
+					return unifyValue(reflect.ValueOf(v))
+				}
+			}
+		}
 		out := make(map[string]interface{})
 		rt := rv.Type()
 		for i := 0; i < rv.NumField(); i++ {
 			fieldVal := rv.Field(i)
 			fieldType := rt.Field(i)
-
-			// Skip unexported fields
 			if fieldType.PkgPath != "" {
 				continue
 			}
-
-			fieldName := fieldType.Name
-			out[fieldName] = unifyValue(fieldVal)
+			out[fieldType.Name] = unifyValue(fieldVal)
 		}
 		return out
 
