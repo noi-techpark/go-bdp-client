@@ -5,6 +5,7 @@
 package bdpmock
 
 import (
+	"encoding/json"
 	"reflect"
 	"sort"
 	"testing"
@@ -86,6 +87,22 @@ func unifyValue(rv reflect.Value) interface{} {
 		return out
 
 	default:
+		// json.Number is a number whose Kind() is String, so it has to be
+		// recognised by type rather than by kind. It appears whenever a payload
+		// was decoded with json.Decoder.UseNumber — which a producer does to
+		// keep a literal exact instead of letting a float64's 53-bit mantissa
+		// round it. Without this case the captured side holds a string while
+		// the snapshot, read back from a file, holds a float64, and every
+		// comparison involving a number fails for a reason that has nothing to
+		// do with the code under test.
+		if n, ok := rv.Interface().(json.Number); ok {
+			if f, err := n.Float64(); err == nil {
+				return f
+			}
+			// Beyond float64's range: compare the literal rather than a value
+			// that is already wrong.
+			return n.String()
+		}
 		// Handle basic types (int, float, string, etc.)
 		// If it's numeric, convert to float64
 		if isNumeric(rv) {
